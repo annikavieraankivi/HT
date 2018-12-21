@@ -135,7 +135,7 @@ public class Activity6 extends AppCompatActivity {
                     String test1 = element.getElementsByTagName("gymname").item(0).getTextContent();
                     String test2 = element.getElementsByTagName("date").item(0).getTextContent();
                     if (test1.equals(gymchoice) && test2.equals(datechoice)) {
-                        showArray.add(element.getElementsByTagName("gymname").item(0).getTextContent().toString()+" "+element.getElementsByTagName("date").item(0).getTextContent().toString()+" klo "+element.getElementsByTagName("time").item(0).getTextContent().toString()+" " +element.getElementsByTagName("name").item(0).getTextContent().toString()+", " +element.getElementsByTagName("name").item(0).getTextContent().toString());
+                        showArray.add(element.getElementsByTagName("gymname").item(0).getTextContent().toString()+" "+element.getElementsByTagName("date").item(0).getTextContent().toString()+" klo "+element.getElementsByTagName("time").item(0).getTextContent().toString()+" " +element.getElementsByTagName("name").item(0).getTextContent().toString()+", " +element.getElementsByTagName("use").item(0).getTextContent().toString());
                     }
 
 
