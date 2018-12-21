@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final XMLwriter write = new XMLwriter();
-        //write.writeXml(context);
     }
 
     public void openActivity2() {
