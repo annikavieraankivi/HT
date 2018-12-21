@@ -2,12 +2,8 @@ package com.example.n8154.ht2;
 
 import java.util.ArrayList;
 
-public class Dataholder {
+public class Dataholder { //Stores all reservations (could be included in Sali.class)
     final ArrayList<Varaus> reservationlist = new ArrayList<>();
-    final ArrayList<String> painisalilist = new ArrayList<>();
-    final ArrayList<String> peilisalilist = new ArrayList<>();
-    final ArrayList<String> monarilist = new ArrayList<>();
-    final ArrayList<String> kuntosalilist = new ArrayList<>();
 
     private Dataholder() {}
 

@@ -9,19 +9,33 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class Activity3 extends AppCompatActivity {
 
     Spinner spinner;
     ArrayList<String> gymArray = new ArrayList<>();
     ArrayList<Varaus> resArray = Dataholder.getInstance().reservationlist;
-    ArrayList<String> painisalilist = Dataholder.getInstance().painisalilist;
-    ArrayList<String> peilisalilist = Dataholder.getInstance().peilisalilist;
-    ArrayList<String> monarilist = Dataholder.getInstance().monarilist;
-    ArrayList<String> kuntosalilist = Dataholder.getInstance().kuntosalilist;
     Varaushallinta gyms;
     EditText edit1;
     EditText edit2;
@@ -36,8 +50,8 @@ public class Activity3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final XMLwriter write = new XMLwriter();
-        //write.writeXml(); Trying to write other reservations to xml
+        //final XMLwriter write = new XMLwriter();
+        //write.writeXml(); //Write reservations to xml
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
@@ -71,27 +85,62 @@ public class Activity3 extends AppCompatActivity {
 
 
         button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { //Save reservation to arraylist and clear edit texts
+            public void onClick(View v) { //Save reservation if gym is free
                 SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                String userName = sharedPref.getString("username","");
-                Varaus res1 = new Varaus(spinner.getSelectedItem().toString(),edit2.getText().toString(),edit1.getText().toString(),userName,edit3.getText().toString());
-                resArray.add(res1);
-                // Save reservation to gymArray also
-                if (spinner.getSelectedItem().toString() == "Painisali") {
-                    painisalilist.add(spinner.getSelectedItem().toString() +" "+ edit1.getText().toString() +" klo "+ edit2.getText().toString() +" "+ userName.toString()+" "+ edit3.getText().toString());
-                } else if (spinner.getSelectedItem().toString() == "Peilisali") {
-                    peilisalilist.add(spinner.getSelectedItem().toString() +" "+ edit1.getText().toString() +" klo "+ edit2.getText().toString() +" "+ userName.toString()+" "+ edit3.getText().toString());
-                } else if (spinner.getSelectedItem().toString() == "Kuntosali") {
-                    kuntosalilist.add(spinner.getSelectedItem().toString() +" "+ edit1.getText().toString() +" klo "+ edit2.getText().toString() +" "+ userName.toString()+" "+ edit3.getText().toString());
-                } else if (spinner.getSelectedItem().toString() == "Monitoimisali") {
-                    monarilist.add(spinner.getSelectedItem().toString() +" "+ edit1.getText().toString() +" klo "+ edit2.getText().toString() +" "+ userName.toString()+" "+ edit3.getText().toString());
+                String gymchoice = spinner.getSelectedItem().toString();
+                String datechoice = edit1.getText().toString();
+                String timechoice = edit2.getText().toString();
+                if (checkIfFree(gymchoice, datechoice, timechoice) == 0) { // Check if gym is free
+                    Toast.makeText(getBaseContext(),"Aika on varattu!",Toast.LENGTH_LONG).show();
+                    edit1.getText().clear();
+                    edit2.getText().clear();
+                    edit3.getText().clear();
+                } else {
+                    String userName = sharedPref.getString("username", "");
+                    Varaus res1 = new Varaus(spinner.getSelectedItem().toString(), edit2.getText().toString(), edit1.getText().toString(), userName, edit3.getText().toString());
+                    resArray.add(res1);
+                    edit1.getText().clear();
+                    edit2.getText().clear();
+                    edit3.getText().clear();
                 }
-                edit1.getText().clear();
-                edit2.getText().clear();
-                edit3.getText().clear();
             }
 
         });
+    }
+
+    public int checkIfFree (String gymchoice, String datechoice, String timechoice) { // Check if gym is free
+        try {
+            File file = new File("/data/user/0/com.example.n8154.ht2/files/reservations.xml");
+            InputStream is = new FileInputStream(file.getPath());
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(new InputSource(is));
+            doc.getDocumentElement().normalize();
+            System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
+            NodeList nList = doc.getDocumentElement().getElementsByTagName("reservation"); // Get all reservations
+            for (int i=0; i<nList.getLength(); i++) {
+                Node node = nList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String test1 = element.getElementsByTagName("gymname").item(0).getTextContent();
+                    String test2 = element.getElementsByTagName("date").item(0).getTextContent();
+                    String test3 = element.getElementsByTagName("time").item(0).getTextContent();
+                    System.out.println(gymchoice + datechoice);
+                    if (test1.equals(gymchoice) && test2.equals(datechoice) && test3.equals(timechoice)) { // If gym, date and time matches, return 0;
+
+                        return 0;
+                    }
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("#########DONE#########");
+        } return 1; // If gym is free, return 1
     }
     }
 

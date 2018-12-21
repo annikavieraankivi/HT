@@ -1,6 +1,6 @@
 package com.example.n8154.ht2;
 
-public class Sali {
+public class Sali { // Stores gym names
     String name;
 
     public Sali(String n) {

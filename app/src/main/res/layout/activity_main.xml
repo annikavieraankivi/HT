@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="74dp"
         android:text="Muokkaa yhteystietoja" />
 
     <Button
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="138dp"
+        android:layout_marginTop="156dp"
         android:text="Tee varaus" />
 
     <Button

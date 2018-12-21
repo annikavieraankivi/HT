@@ -1,5 +1,6 @@
 package com.example.n8154.ht2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Context context = MainActivity.this;
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 openActivity6();
             }
         });
+
+        final XMLwriter write = new XMLwriter();
+        //write.writeXml(context);
     }
 
     public void openActivity2() {

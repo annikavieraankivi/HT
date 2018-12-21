@@ -2,7 +2,7 @@ package com.example.n8154.ht2;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Varaus {
+public class Varaus { // Stores reservation info
     private String gymName;
     private String time;
     private String date;
